@@ -1,4 +1,4 @@
-from flask import Flask, request,jsonify
+from flask import Flask, request,jsonify,current_app
 # import authmodels.model as model
 import requests
 import jwt
@@ -14,7 +14,12 @@ app.config['SECRET_KEY'] = "123456"
 @app.route("/")
 def hello():
     return {"hello": "auth"}
-
+'''
+this is a sample role dict.Generally the role , permissions
+ and username are stored in authorization table or
+we can create a new microservice called authorization
+'''
+role_dict1 ={'admin' : 'create', 'employee' : 'view'}
 
 @app.route("/login", methods=['POST'])
 def login():
@@ -26,11 +31,21 @@ def login():
     if not user:
         return jsonify({'message': 'Invalid credentials', 'authenticated': False}), 401
 
+    if username == 'Artin':
+        role = 'admin'
+        permission = role_dict1[role]
+    else:
+        role = 'employee'
+        permission = role_dict1[role]
+
     token = jwt.encode({
-        'sub': username,
+        'iss': "Authentication microservice",
         'iat': datetime.utcnow(),
-        'exp': datetime.utcnow() + timedelta(minutes=30)},
-        app.config['SECRET_KEY'])
+        'exp': datetime.utcnow() + timedelta(minutes=30),
+        'username': username,
+        'role': role,
+        'permission' : permission},
+        current_app.config['SECRET_KEY'])
     print("token")
     print(token)
     return jsonify({'token': token.decode('UTF-8')})
