@@ -2,3 +2,7 @@
 .git/
 
 index.html
+AuthenticationMS/__pycache__/security.cpython-37.pyc
+userManagementMS/__pycache__/__init__.cpython-37.pyc
+userManagementMS/__pycache__/__init__.app.cpython-37.pyc
+userManagementMS/__pycache__/__init__.apps.cpython-37.pyc
